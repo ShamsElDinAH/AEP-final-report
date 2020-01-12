@@ -1,0 +1,11 @@
+To conclude with, this report portrays the development of a tool which can be used for annotating NDD. This tool is designed to estimate several important parameters to help in establishing driver models, specifically tailored to critical lane changes of a POV. Those parameters are the heading angle of the POV, the longitudinal range and the lateral offset between the SV and the POV. The main methods used for estimation are the pixel width method and the triangulation method, each having its own strengths and weaknesses. The tool is also able to detect lanes which would ease the process on the annotator. 
+
+All of this was designed into a convenient GUI designed using python language. In that GUI, the annotator has to manually select, per frame, 2 lane lines, the POV's rear as well as the contact points of the POV's wheels with the ground. The annotation is done on several frames manually and the tool will automatically interpolate the annotations between those frames to make the task easier.
+
+The results of the tool are satisfying. Comparison of some annotated events with radar time-series data showed that the extracted variables are close to the actual radar values. The results revealed the performance of the two discussed methods, where the pixel method showed to be more precise while the triangulation method has a better accuracy.
+
+To further improve the quality of annotation using the tool, simple GUI fixes can be implemented such as resizing image frames by making them bigger and hence easier for manual annotation. Also, better calibration for the estimated variables can be achieved through field testing, as done in \cite{bargman2013using}. As of now, the next step is to use put this tool to use by studying different critical lane change events and recreating the trajectory of the incidents so help analyse such cases. 
+
+% \subsection{Challenges and Limitations}
+
+% \subsection{Future Work}

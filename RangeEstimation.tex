@@ -1,0 +1,16 @@
+\subsection{Range Estimation}
+For the estimation of the range between two vehicles, several methods are available. Two methods which are be implemented in this project are described here.
+
+\subsubsection{Method 1 for Range Estimation: Pixel width}
+The pixel width method, which is explained earlier, can be used for estimating the range between the two vehicles based on the number of pixels that the rear end of the POV encompasses on the image frame. The distance $D$ is calculated in Equation \ref{eqn:distD} which is derived earlier.
+
+As mentioned earlier, the range estimation is enhanced by accounting for the heading angle of the POV as shown in Equation \ref{eqn:w_withheading}.
+
+\subsubsection{Method 2 for Range Estimation: Triangulation}
+This method has also been described before. For the sake of the range estimation, the tool will get the 3D coordinates of the rear left point of the POV, which lies on the ground. For this method to work properly, the used must be careful when defining the rear of the vehicle. While the pixel width method relies on the number of pixels which are estimated by the brake lights, this method assumes that the lower edge of the box defined by the user for the rear end of the POV is on the ground plane. Using this assumption, the tool will calculate the distance to the lower left corner of the user defined box.
+
+Another way to get the range is to calculate the distance to the rear wheel, which was defined for calculating the heading angle, and account for the length of the POV's trunk.
+
+
+\subsubsection{Error Estimation}
+Similar to the estimation of lateral distances, the longitudinal distances also rely on the assumptions discussed earlier. For the same reason as before, an error will be calculated based on the difference between the output of the tool and the radar data available.

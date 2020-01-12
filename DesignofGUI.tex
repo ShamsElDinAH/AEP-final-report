@@ -1,0 +1,59 @@
+\subsection{Design of Tool and Graphical User Interface}
+
+
+The GUI should be intuitive and simple to use. The available input methods are the keyboard and mouse. These controls should be optimised to speed up the annotation process. The basic outline of the tool is described in the titles mentioned in this section.
+
+\subsubsection{Video Player}
+The video player must have the ability to load a video file from a chosen path and view it in a window. Since the goal is to annotate through the video and mark objects in the frames, the user should be able to play, pause and skip through frames.
+
+The openCV library has a $imread()$ function that can read video files frame by frame and store them into arrays objects in the program memory. This would later allow for iterations through the video frames as well as drawing and marking objects on the frame by the user. The library also has an $imshow()$ function that can show the chosen image in a predefined window. These two functions will be used to develop the video player
+
+\subsubsection{Controls}
+The controls are what allow the user to control the video and mark objects in frames. This was done using keyboard buttons, where different keys were mapped to do different functions. Visual buttons were also added alongside the keyboard controls for better usability. 
+
+
+
+Upon selecting a frame of interest, the user should be able to define an object in the frame. For this scope of this project, only the following objects were considered relevant for the intended output:
+
+\begin{itemize}
+    \item POV placement\\
+    The user should select a rectangle in the part of the frame where the rear pf the POV is, since the range estimation will be calculated using the vehicle width in pixels. 
+    \item POV wheels\\
+    To be able to calculate the heading angle, the user should identify the points where the POV wheels touch the ground. 
+    \item Right/Left lane\\
+    The user should define points where the placements of the right and left lanes are.
+\end{itemize}
+
+For drawing and marking objects, the openCV library has a function to save the position and action of the computer mouse. These functions were used to draw shapes on the image to visualise user input. 
+
+Keyboard controls were implemented using the openCV $waitkey()$ function that logs key presses while an OpenCV window is active. Upon pressing a key, a status variable would change within the program depending on which key was pressed. Visual control buttons with the same functionality were implemented in a separate window alongside the main view window using Tkinter and mapped to the same status variable. This way, both keyboard and visual buttons would work in tandem to improve usability. 
+
+\subsubsection{Displaying Information}
+
+It is important that the user sees areas that are marked and what the program has identified them as. This was done using different shapes and colours, alongside a window to display information to the user about the current status of the program (i.e what input is currently being saved). 
+
+Different colours were implemented when drawing shapes in the image, using the openCV library. A separate window was implemented below the main view window using Tkinter, to display information about the current status of the program.
+
+\subsubsection{Loading and Saving Data}
+\label{sec:Loading_and_saving_data}
+
+There are two inputs to the program, the video and the corresponding $.mat$ file containing the time-series data of the SV, which will be needed to calculate the output variables.
+
+All the user input described above was saved in a structured manner that allows for ease of access within the program. This was done through creating a class with fields, much like a struct type in Matlab, that will be passed on as an argument to functions within the program. That way, the functions will have access to all available information, which was especially useful in the early testing and debugging phase. After the user is done with annotating a video, the data was saved to allow for re-annotation at a later time.
+
+Two output files were created, first of which is a $.pickle$ file containing the annotation output. This file was exported using Pickle since it is easier to import the data back into Python as it maintains the structure and data types as the original object. The other is a $.mat$ file that contains the same data but is compatible with Matlab. This should make it easier for the annotator to post-process the data in Matlab, since it is a more familiar program for most and is the same type of file as the time-series data available from SHRP2. 
+
+
+\subsubsection{Writing a User Manual}
+
+After completion of the tool, a user manual was written to instruct the user on how to use the tool and some basic overview on the structure of the output data. This also includes guidelines on how to get better output accuracy.
+
+\subsubsection{Testing User Sensitivity}
+% \textcolor{red}{this part should be moved? the user annotation results were moved under the range estimation method 1}
+
+% To verify the quality of the output data, some videos that have radar range available have been annotated using the tool. The output range in both lateral and longitudinal directions have been compared with the radar data available. This  provided an indication on the magnitude of the error between the annotated variables and the variables extracted from the SHRP2 dataset. 
+
+To investigate how sensitive the tool is to the user input, a sample of videos were annotated by the four different members of the team multiple times, since not all annotators will input data identically. 
+
+
+% The user interface will consist of a three main windows, one for viewing the chosen video, one for the control buttons, and one viewing information to the user about the current status of the program. The user will have the option to pause and  

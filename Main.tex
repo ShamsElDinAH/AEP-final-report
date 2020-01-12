@@ -1,0 +1,184 @@
+\documentclass[a4paper]{article}
+% \usepackage{fullpage}
+% \usepackage[top=1.5cm, bottom=1.5cm, left=2cm, right=2cm]{geometry}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{geometry}
+% \usepackage{floatrow}
+\usepackage{layout}
+\usepackage{amssymb} 
+\usepackage{multirow}
+\usepackage{caption}
+\usepackage{pgfgantt}
+\usepackage{float}
+\usepackage{hyperref}
+\usepackage{glossaries}
+\usepackage{listings}
+\usepackage{hyperref}
+\usepackage{amsmath}
+% \usepackage{caption}
+% \usepackage{subfigure}
+\usepackage{tikz}
+
+\usepackage{titlesec}
+
+\setcounter{secnumdepth}{4}
+
+\titleformat{\paragraph}
+{\normalfont\normalsize\bfseries}{\theparagraph}{1em}{}
+\titlespacing*{\paragraph}
+{0pt}{3.25ex plus 1ex minus .2ex}{1.5ex plus .2ex}
+
+
+
+\usetikzlibrary{calc,intersections,through,backgrounds,angles,quotes}
+
+
+\geometry{margin=1.0in}
+\usepackage{authblk}
+\usepackage{indentfirst}
+ 
+
+\begin{document}
+\pagenumbering{roman}
+
+%----------------------INITIALIZE TABLE PARAMETERS------------------------%
+\newcommand\mTitle{\textbf{}}
+\newcommand\mNumber{}
+\newcommand\mLocation{}
+\newcommand\mDate{}
+\newcommand\mDuration{}
+\newcommand\mAttendies{}
+\newcommand\mMinuteTaker{}
+\newcommand\mDiscussion{}
+\newcommand\mFuturePlans{}
+\newcommand\mDeadlines{}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\title{TME-180 Final report\\ 
+\textbf{Variables extraction and trajectory reconstruction for
+modelling driver behaviour}}
+\author{\textbf\large{Ahmed Hamdy Shams El Din}\\
+        \textbf\large{Mohamed Takkoush}\\
+        \textbf\large{Nicklas Pettersson}\\
+        \textbf\large{Sriranga Hulkunte Gopinath}}
+%\affiliation{The	College,	University	of	Chicago,	Chicago,	Illinois	60637,	USA}
+\affil{\textbf{Chalmers University of Technology, Gothenburg, Sweden}}
+\date{\today}
+%	Abstract
+\maketitle
+\begin{abstract}
+\input{Abstract.tex}
+\end{abstract}%\maketitle
+\newpage
+\section*{Acknowledgement}
+
+\noindent
+This work has been performed under the VTTI Data License Agreement. The findings and conclusions of this report are those of the authors and do not necessarily represent the views of VTTI, the Transportation Research Board, or the National Academies.
+\noindent
+
+\noindent
+\\
+Special thanks to the project supervisors \textbf{Jonas Bärgman} and \textbf{Giulio Bianchi Piccinini} for their support during the course of this project. Their guidance and understanding helped us during tough weeks, and their encouraging recommendations were paramount for writing the report. We would also like to thank our families and friends who stood by our side with mental support since the day we started on the project up until this moment.
+
+
+% \textcolor{red}{You need to have an Acknowledgement section with, at least, the following information: "The findings and conclusions of this report are those of the authors and do not necessarily represent the views of VTTI, the Transportation Research Board, or the National Academies" You will also need to include the following statement included: "This work has been performed under the VTTI Data License Agreement (DUL): SHRP2-DUL-16-204.}
+
+\newpage
+\tableofcontents
+\newpage
+\pagenumbering{arabic}
+%%	Main	body	starts	here
+
+\section*{Abbreviations}
+\addcontentsline{toc}{section}{Abbreviations}
+\input{Abbreviations.tex}
+
+\newpage
+
+\section{Introduction}
+\label{sec:Intro}
+%	Introduction
+Understanding human behaviour is an important step for the development of computational driver models. These models are currently used in the evaluation of modern active  systems \cite{bargman2017counterfactual}. Through the analysis of  videos collected during naturalistic driving studies, information about driving behaviour can be obtained and used for the development of driver models. However, the retrieval of information from Naturalistic Driving Studies (NDS) often requires manual annotations of the data, which is a time consuming task \cite{DOZZA2013298}.
+
+This project aims to develop a tool that can support the manual annotations of NDS, with the final objective to increase the accuracy of the annotations and reduce the time required to extract the variables. The safety-critical target scenario under evaluation for the development of the tool is the lane change manoeuvre: in this safety-critical target scenario, the lead vehicle  attempts or succeeds to change lane in front of the following vehicle, causing the driver of the following vehicle to perform an evasive manoeuvre (brake or steer away) to avoid a crash. In this report, the lead vehicle will be referred to as the Principal Object Vehicle (POV) and the following vehicle referred to as the Subject Vehicle (SV). 
+
+The developed tool utilizes a video of the forward roadway recorded by the camera installed in the SV. The expected outputs from the tools are variables, such as the speed of the POV, the distance between the SV and the POV, the distance between the POV and the lane marks. The extracted variables can be used to develop driver models describing the SV drivers' response to the lane change of the POV.
+
+% If possible, the tool will finally be evaluated using data collected from a small scale experiment with a vehicle equipped with reference measurement systems (e.g forward video camera) close to the one used in the specified data-set.
+
+The stakeholders of this project are AB Volvo and Zenuity, who occasionally took part in meetings and attended the presentations. The suggestions and needs of the stakeholders were considered while developing a dynamic tool for different uses.
+
+
+
+\input{Background.tex}
+\input{AimScope.tex}
+\input{LiteratureReview.tex}
+\input{Ethics.tex}
+
+%	Methodology
+\section{Methodology}
+\label{sec:Methodology}
+\label{sssec:Manual Tracking}
+\input{MethodologyOverview}
+\input{ImageRectification.tex}
+\input{LaneDetection.tex}
+\input{HeadingOffset.tex}
+\input{RangeEstimation.tex}
+\input{VehicleTracking.tex}
+\input{DesignofGUI.tex}
+% \input{Experiment}
+%	Experiment and Results
+\section{Results}
+\label{sec:Results}
+\input{Results.tex}
+
+% % Challenges & Limitations
+% \section{Challenges and Limitations}
+% \label{sec:ChallengesLimitations}
+% write here
+
+% Discussion
+\section{Discussion}
+\label{sec:Discussion}
+
+\input{Discussion.tex}
+
+
+% Conclusion
+\section{Conclusion}
+\label{sec:Conclusion}
+\input{Conclusion.tex}
+
+% % Future Work
+% \section{Future Work}
+% \label{sec:FutureWork}
+% write here
+
+% \vspace{6cm}
+% \color{black}
+% \noindent\rule[0.25\baselineskip]{\textwidth}{1pt}
+% Bibliography
+% \small
+%\bibliographystyle{unsrt}
+
+
+\newpage
+\bibliographystyle{unsrt}
+\bibliography{references}
+
+% \begin{thebibliography}{10}
+
+\newpage
+\section{Appendix}
+\label{sec:Appendix}
+\input{Appendix.tex}
+
+
+% \end{thebibliography}
+
+
+
+
+
+\end{document}

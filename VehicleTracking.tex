@@ -1,0 +1,11 @@
+\subsection{Vehicle Tracking}
+To be able to calculate the speed and the distance to the POV, the width of the POV has to be found in video frame by frame. Like lane tracking, this could be done manually by the user, automatically by the program or in a semi-automatic fashion.
+
+\subsubsection{Manual Tracking}
+The user was asked to mark in the video image, frame by frame, where the rear of the POV is. Here, the rear of the vehicle is roughly defined by the two brake lights. To simplify this process, the user is given the option to define the rear of the POV in one frame, skip though multiple frames, then define the rear of the POV again in a later frame. The program will then interpolate the box coordinates between the user-defined inputs and estimate the width of the POV in the intermediate frames without any input from the user, in a similar manner to the manual lane tracking mentioned earlier. The user is then able to view all the video frames and make corrections where the estimations are not accurate (i.e the box is not bounding the rear of the POV). 
+
+\subsubsection{Automatic Tracking}
+The openCV library has some functions that can perform object tracking using pre-trained neural networks for identifying shapes in images. Depending on the quality of these algorithms, the POV could be identified in the video frames automatically. In that case, the user would only need to check the video images to assure that the automatic tracking has identified the POV correctly, through all the frames. 
+
+\subsubsection{Semi-Automatic Tracking}
+If the object tracker mentioned above is not accurate enough, one hybrid solution could be to combine the automatic tracker data with some user defined inputs, in order to make a more accurate estimation of the POV position across frames. This would have the benefit of reducing the time needed to annotate one video while maintaining good output quality.

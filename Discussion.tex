@@ -1,0 +1,66 @@
+% The annotation of naturalistic driving data is essential in deriving reliable driver models. It was imperative to idealise a new tool which could make the annotation simpler and faster by making it semi-automatic/automatic. Although the tool is sensitive in some cases, it can be improved with better validation data to benchmark. 
+
+The results presented above are peculiar and interesting. While some deserve to be explained further to understand how they are helpful for the tool development, others should be questioned and criticised. This will be done below in this section.
+
+\subsection{Image Rectification}
+While image rectification is a key factor in analysing images to calculate distances, there is not much to say about the results of the image rectifications in this report when it comes to intrinsic parameters. In fact, the values used for intrinsic rectification are provided by VTTI, and although not all cameras in the NDS are the same, the intrinsic rectification provided reasonable results overall.
+
+For the extrinsic parameters on the other hand, the project follows a rather unorthodox approach where not the whole image is rectified for the extrinsic parameters, but only the points needed for calculation. Those points are rectified for the camera's pitch and yaw only, excluding the roll motion of the vehicle since the SV is assumed to be driving in its lane and not making any maneuvers. This rectification was more important for getting a more accurate result for distance calculation, but does not have a drastic effect on the results.
+
+\subsection{Lane Tracking}
+Lane detection was observed on variety of spectrum, starting from quality of videos to different types of lanes. The lane detection pipeline included obtaining rectified images, followed by masking, filtering, edge detection and classification of geometry(Hough transform). The results obtained on all quality of videos infer the simplicity and effectiveness of the algorithm, although the lane detection is semi-automatic in nature. It can be further developed as an automatic detection using machine learning optimisation. This further development can benchmark the existing tool. Bird's eye transformation can be explored further by integrating it in the GUI and compare the existing lane detection to draw conclusions on the findings. It is important to notice some of the errors in lane detection like flickering and false detection at times due to wrong masking. This issue can be addressed in the further development. All in all lane detection works well for the naturalistic database used here and functions as a useful technique.
+
+
+\subsection{Heading Angle}
+\label{sec:heading_angle_discussion}
+The heading angle, as mentioned earlier, is an important parameter because it helps in the estimation of other parameters such as the longitudinal range between the two vehicles. The method proposed in this project seems to be an innovative method which gives reasonable results. This method however suffers from low precision since it relies on the human annotator to select the right pixels where the wheels of the POV contact the road. Also, in some cases, the wheels are hard to capture, for example when the POV is in front of the SV, or sometimes do not appear on the image.
+
+There was no apparent way to verify the heading angle estimation using the time series data. Instead, the estimated heading angle acquired from the annotation tool was evaluated through first annotating a number videos and then comparing the heading angle visually through studying the footage. According to the visual inspection, the heading angle estimation seemed to be accurate, reaching $0[rad]$ when the POV is moving parallel to the lane and reaching a reasonable maximum value when the POV is cutting in-front of the SV, as shown in Figure \ref{fig:heading_angle}.
+
+To understand the effect of the heading angle on the estimation of the other parameters, the error of those parameters were measured as a function of heading angle. The results were shown in Figures \ref{fig:lat_offset_error_heading} and \ref{fig:range_error_vs_heading}, and will be discussed below as well.
+
+\subsection{Lateral Offset}
+\subsubsection{Filtering}
+Applying a filter on the results improved the quality of estimating the speeds, especially at higher distances where the filtering removed irrational sudden jumps in the velocities which are caused by discrete pixel numbers. The results are satisfactory and allow for comparison between the resultant values and radar data. 
+
+The filtering was only applied and tested on the pixel width method, which was used to calculate the velocities. The triangulation method, on the other hand, was only developed for distance calculation. The filtering, which proved to be effective, can be implemented on the triangulation method in order to calculate the POV speed. This would be interesting since the triangulation method showed many fluctuations due to its reliance on human annotations. 
+
+Since the filtering of the data is basic, the team discussed introducing more sophisticated filters to the tool such as frequency filters in further developments.
+
+\subsubsection{Lateral Offset versus Radar Data}
+
+The lateral offset matches the radar data with a reasonably small error. The results from both methods are precise where multiple annotations gave similar results. The pixel width method shows a consistent performance with a persistent offset while the triangulation method has more fluctuations in the results but is reaching more accurate values. The sensitivity of the tool can be enhanced by combining the two methods in a sensor fusion manner in order to reduce the uncertainty of the results and have a more robust estimation.
+
+The error of lateral offset proved to be unaffected by the actual lateral offset when using the pixel width method while no conclusive result was achieved for the triangulation method since there is an error in the plotting of the curves as mentioned earlier (Figure \ref{fig:lat_offset_error_distance}). As for the relation to the heading angle of the POV, Figure \ref{fig:lat_offset_error_heading} showed no certain results and hence it was agreed that further testing of the tool is required in order to reach a rational conclusion.
+
+
+\subsection{Range Estimation}
+\subsubsection{Filtering}
+There is not much to add about the filtering of data to what was discussed in the lateral offset method. It is worth mentioning that the filtering has a minor effect on the distance estimations, but the main influence is on the POV estimated velocity.
+
+\subsubsection{Range versus Radar Data}
+The estimated distances follow the curves of the radar data to a great extent, especially under 15 [m]. However, it is noticed that the pixel width method has an obvious and constant offset from the radar data as it was seen in Figures \ref{fig:range_vs_radar_event1} and \ref{fig:range_vs_radar_event2}, and it is assumed that this is a calibration issue since, as mentioned earlier, the width of the POV is assumed as well as the relative position between the camera and the radar. Those factors could be the reason for the constant offset when using the pixel width method. Regardless of the aforementioned offset, since the estimation curve follows the same shape of the radar data curve, the resultant range rate is capturing the correct relative speed of the POV with respect to the SV, as seen in Figures \ref{fig:range_vs_radar_event1} and \ref{fig:range_vs_radar_event2}. The triangulation method, on the other hand, seems to record the range more accurately although it suffers from some instabilities, especially if the SV is making harsh manoeuvres.
+
+As for the sensitivity of the estimations in relation to the actual distance, it was revealed that at higher distances, both calculation methods have relatively higher errors up to 8 [m] at a range over 20 [m]. Another interesting observation confirms what has been discussed about the triangulation method over and over: this method shows more fluctuations but has a lower average error. This was proven in Figure \ref{fig:range_error_vs_radar}. When comparing the range errors to the heading angle of the POV, an interesting aspect was noticed, where the range error was decreasing with an increase in the POV heading angle (Figure \ref{fig:range_error_vs_heading}). The result could not be explained by relying on only the two showcased events. In the future, more annotations will be carried out by several annotators, and the results should explain or reject this ambiguity.
+
+\subsection{Vehicle Tracking}
+Even though automatic tracking was not achieved, the tool was able to simplify the manual tracking process through interpolating manual inputs. This proved to be capable of tracking the POV with relatively good accuracy for being such a simple method. The downside with this method is that it relies on the annotator marking the rear of the POV correctly. It was found that there are some simple improvements that can be done to the GUI that will help the annotator increase accuracy, as mentioned in following section. 
+
+Automatic tracking was promising and the YOLO is capable of identifying all vehicles in the frame, as shown in Figure \ref{fig:yolo_image}. However, there must still be user input to identify which of the identified vehicles is the POV. It can be assumed that the POV is the closest vehicle, but that was not the case in all events. 
+
+Moreover, as mentioned in section \ref{sec:3.6.2}, the methods used for calculating the range to the POV rely on the rear of the POV begin identified in the frame. The box found by the YOLO in Figure \ref{fig:yolo_image} bounded all the pixels in the frame that contain part of a vehicle.
+
+It was thought that the tracking could be made semi-automatic, where the annotator marked a box around the rear of the POV, and the program would use that and track the vehicle found by the YOLO algorithm across frames. Due to time constrains, however, this method was not tested. 
+
+The next step would be to combine the automatic detection using YOLO with the interpolated user annotation to possibly gain more accurate and faster vehicle tracking.
+
+\subsection{Graphical User Interface}
+
+The user interface and overall programming of the tool functioned well and was responsive to user inputs. The program was made modular with different small functions, which allowed for easier troubleshooting and improving functionality without affecting previous progress.
+
+Computational optimisation was not done which was initially not an issue, since the carried calculations were not CPU intensive. However, real time plotting shown in Figure \ref{fig:online_plots} was slow and caused the program to slow down. This mean that while playing the video with the plotting on, the video would appear to play at about half speed. This was not a big issue for annotation, since all inputs when edited when the video was paused on one frame.  
+
+The change due to user variation shown in Figure \ref{fig:same_vid_5times} was expected. The fact that the results converged at $\approx 15[m]$ was better than initially thought. However, some changes were found that could reduce the variation at distances larger than $\approx 15[m]$. 
+
+One solution would be to enlarge the frame to twice the size. This would effectively have made the POV to look twice as big on the screen, which would have made drawing a box around the rear of the POV easier. This would also have made marking other objects in the frame, such as POV wheels and lanes, easier and more accurate, which would have improved the stability of heading calculation, as discussed in \ref{sec:heading_angle_discussion}. This method was tested briefly, but the resulting distance calculations were wrong, since the pixel size of the POV was doubled. Due to time constraints, the team did not have the time to troubleshoot and fix the distance errors and this method is to be pursued in future work. 
+Another solution to improve accuracy was to change the size of the blue box shown in Figure \ref{fig:stages_of_inputs} used to define the rear of the POV. It was found that the thickness of line used to draw this box is 2 pixels wide, which, when the POV is further away than $\approx 15[m]$ was part of what caused the fluctuation seen in Figure \ref{fig:same_vid_5times}. This box was drawn using the $cv2.selectROI()$ function, which does not allow for changing the width of the bounding box. Another, similar function has been developed by the team where all parameters of the box are changeable. However, this was not implemented in the tool due to time constraints, but is relatively easy to add in future work.
